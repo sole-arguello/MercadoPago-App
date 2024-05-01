@@ -1,0 +1,87 @@
+https://medium.com/@ignaciojsoler/integrando-la-pasarela-de-pago-checkout-pro-de-mercado-pago-con-react-y-node-js-ecc17b077655
+
+
+- crear un proyecto React Vite:
+    - abrir terminal
+    - npm create vite@latest
+    - Dar nombre al proyecto: Client (front)
+    - Me dice que el package va a llevar ese nombre
+    - Elijo React
+    - Elijo js-swc
+    - me muevo con cd a Client
+    - npm i (intalo las dependencias)
+    - npm run dev (levanto el servidor y corre el proyecto)
+    - rafce cont Componente = () => { return ( <></> ) } export default Componente
+    - Intalar dependencias: axios, y el sdK: @mercadopago/sdk-react
+
+    - Dentro del componete:
+
+            - Creo un estado para el id de la preferencia en null
+            - Luego inicializar mercadopago
+            - Como en el front genero una funcion Post con la url al back y que genere una preferencia
+            - Un manejador del boton que contenga el boton de mercado pago
+            - Traer la configuracion desde la pagina de mercado pago
+
+- Crear el servidor Node en forma manuarl:
+    - cd moverme a server
+    - npm init -y (genera las configuraciones del lado del servidor)
+    - creo un archivo server.js
+    - en el package.json modifico el main a server.js y agrgo "type": "module",
+    - npm i express cors mercadopago, e importo y comfiguro los modulos express, cors y mercadopago
+    - Correr el servidor "node server.js"
+
+
+;
+En mercado pago dev:
+- https://www.mercadopago.com.ar/developers/es
+- inicio sesion
+- En la solapa developers, bajo elijo pagos online
+- Dentro elijo checkout pro
+- A la izquierda en el menu, ejlijo "Elejir el tipo de integracion"
+- Elejir Node.js
+- Mas abajo en ejemplo de implementacion, hay un link "ejemplo de integración completa" 
+- lleva a github: https://github.com/mercadopago/checkout-payment-sample
+        - Integracion del lado del Back, ir a crear preferencias:
+            - Dentro en carpeta server node:
+                - Me traigo el post "create-preference"
+                - Y el mercadopago.confugure: las configuraciones desde la pagina de mercado pago
+
+
+- app.listen(port, () => console.log('Server running on port 3000'))
+- Correr el servidor "node server.js"
+- Voy al navegador y compruebo que hay en el puerto que configure: Cannot GET / lo cual es normal porque no tengo nada 
+- Poner para probar que funcione el servidor un get hola mundo, matar el servidor y volver a correr, mirar la web el hola mundo
+
+- En la pagina:
+
+    - Integrar del lado del front:
+            - Elejir el tipo de integracion
+            - import { initMercadoPago, Wallet } from '@mercadopago/sdk-react'
+                initMercadoPago('YOUR_PUBLIC_KEY');
+
+            - La public key:
+
+            - Pasarella de pago: <Wallet initialization={{ preferenceId: '<PREFERENCE_ID>' }} customization={{ texts:{ valueProp: 'smart_option'}}} />
+                Se va inicializar con un id de preferencia, que es el que se genero en el checkout
+
+
+- Configuracion del mercado pago:
+    - Ir a "Tus Integraciones" 
+    - Boton Crear Aplicacion: llenar un formulario
+    - Ingresar a la aplicacion creada:
+        - Tengo: - Cuentas de prueba: sirve para simular una compra de un usuaario a nuestra cuenta
+                 - Credenciales de prueba: se encuentra la YOUR_PUBLIC_KEY y YOUR_ACCESS_TOKEN
+                 - Tarjetas de prueba: son tarjetas falsas para probar
+                 - Producción: Credenciales de producción: es para poder utilizar la API en forma real y recibir pagos reales
+ 
+
+
+- Hacer correr los servidores:
+    - Probar pagos con tarjeta:
+        - Ir a tarjetas de prueba: me brinda 3 tarjetas de credito con sus datos
+           - Copiar los datos: 5031 7557 3453 0604
+                                123
+                                11/25
+
+           - Cerrar mi cuenta y luego hacer las pruebas
+           - ir a mi aplicacion y dar al boton de buy
