@@ -114,11 +114,16 @@ Son dos maneras que encontre para conectar:
             * En back_urls: los enlaces que creemos para devolver al cliente.
             * auto_return: lo que hace es que si todo sale bien, direcciona a la pasarella de mercado pago con los datos del Item, para procesar el pago.
         - En postman o thunder client o el de preferencia hacer la prueba de coneccion:<br>
-          Para hacer la prueba los datos lo cargue harcodeados, como muestra la imagen
+          Para hacer la prueba los datos lo cargue harcodeados, como muestra la imagen<br>
+          Esta misma prueba se puede hacer cargando los datos desde el body<br>
           Debe mostrar la url de coneccion a la pasarrella, la cual si la pegamos al navegador debe confirmar que conectamos.
-       
           
-          ![](/img/prueba-post.png)
+         <div style="display: flex; flex-direction: row">
+          <img src='/Img/prueba-post.png' style="width: 70%; height: auto;">
+          <img src='/Img/prueba-pago.png' style=" ">
+         </div>
+          
+          
           
         
   
