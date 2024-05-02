@@ -2,7 +2,7 @@ Pasarella de MERCADO PAGO 2024
 ====
 Son dos maneras que encontre para conectar:
 
-  * La primera conenta directamente con la URL por medio del ACCESS TOKEN que redirecciona a la pasarrella
+  * La primera conecta directamente con la URL por medio del ACCESS TOKEN que redirecciona a la pasarrella
   * La segunda conecta por medio de ACCESS TOKEN del lado del server, la KEY del lado del clinte y el boton
    Wallet que redirige a la pasarrella, como lo indica la [documentacion](https://www.mercadopago.com.ar/developers/es/docs/checkout-pro/integrate-checkout-pro/web)
 
@@ -32,6 +32,7 @@ Son dos maneras que encontre para conectar:
  * Tambien dentro de integraciones en la solapa Tarjetas de Prueba extraer los datos de cualquier tarjeta para las pruebas
  * **IMPORTANTE**: desloguearse para hacer las pruebas del pago.<br><br>
 
+### Para la forma 1:
 
 > Paso 2: (Forma 1) Creacion de la estructura y configuracion del back con Node y Express
 
@@ -115,6 +116,13 @@ Son dos maneras que encontre para conectar:
             * En back_urls: los enlaces que creemos para devolver al cliente.
             * auto_return: lo que hace es que si todo sale bien, direcciona a la pasarella de mercado pago
                con los datos del Item, para procesar el pago.
+   
+            * Aqui capturo la url en el `init_point` que me brinda mercado pago, la cual cambia por cada consulta que recibe:
+              ```
+               const response = await mercadopago.preferences.create(preference);
+               //console.log('Respuesta', response.body.init_point);
+               res.status(200).json(response.body.init_point );
+              ```
         - En postman o thunder client o el de preferencia hacer la prueba de coneccion:<br>
           Para hacer la prueba los datos lo cargue harcodeados, como muestra la imagen<br>
           Esta misma prueba se puede hacer cargando los datos desde el body<br>
@@ -218,6 +226,117 @@ Son dos maneras que encontre para conectar:
   * Brinda el mensaje exitoso del pago y redirecciona nuevamento a la ecomerce:
 
      <img src="/Img/form5.png" style="width: 70%; height: auto;"> 
+
+
+---------------------------------------------------------------------------------------------------------------------<br>
+Para la forma 2:
+  * Crear una carpeta Server para el back 
+  * Iniciar un proyecto: npm init -y
+  * Instalar las dependencias express, cors, dotenv, nodemon, mercadopago
+  * Configurar el package.json, para que corra con el comando `npm run dev o start`, a preferencia del desarrollador.
+  * Crear en la raiz un archivo .env para alojar la variable de entorno con el access token que brinda mercado pago.
+  ```
+    ACCESS_TOKEN = " el access token de mercado pago "
+  ```
+    
+  * Crear en la raiz el archivo server.js:
+     
+        - Realizar las importaciones incluida la de mercado pago tal cual la [documentacion]()
+        ```
+         import express from 'express'
+         import cors from 'cors'
+         import dotenv from 'dotenv'
+         import { MercadoPagoConfig, Preference } from 'mercadopago';
+        ```
+    
+        - Configurar los midllewares, express, cors, express json.
+        ```
+         dotenv.config()
+         const app = express()
+         app.use(express.json())
+         app.use(cors())
+        ```
+
+        - Configurar mercado pago tal cual la documentacion, con la variable proveniente del .env:
+        ```
+         const client = new MercadoPagoConfig(
+         	{ accessToken: process.env.ACCESS_TOKEN || ' ' }
+         );
+        ```
+    
+        - Configurar el puerto para el servidor.
+        - Verificar que al ejecutar `npm run dev` levante el servidor en el puerto configurado con exito.
+
+    
+        - En el archivo .env colocar el access token que brinda mercado pago:<br>
+          ```
+          ACCESS_TOKEN = " el access token de mercado pago "
+          ```
+        - En el archivo routes: <br>
+          - importar `dotenv mercadopago y router`<br>
+          ```
+          import { Router } from "express";
+          import mercadopago from "mercadopago";
+          import dotenv from "dotenv";
+          dotenv.config();
+          ```
+          - Poner la configuracion con el access token que brinda mercado pago y que extraigo del .env:
+          ```
+          mercadopago.configure({
+              access_token: process.env.ACCESS_TOKEN || '',
+          })
+          ```
+
+        - Aplicar un metodo POST `"/"` asincrona
+        - Crear la preferencia:<br>
+        ```
+          app.post("/api/create_preference", async (req, res) => {
+          
+          	
+          	try {
+          		const body = {
+          			items: [
+          				{
+          					title: req.body.title,
+          					unit_price: Number(req.body.price),
+          					quantity: Number(req.body.quantity),
+          					currency_id: "ARS"
+          				}
+          			],
+          			back_urls: {
+          				"success": "http://localhost:5173/",
+          				"failure": "",
+          				"pending": ""
+          			},
+          			auto_return: "approved",
+          		};
+    
+          		const preference = await new Preference(client)
+          		.create({body})
+          		//console.log('preference', preference)
+          		res.status(200).json({ id: preference.id});
+
+          	} catch (error) {
+          		console.error('Error al crear la preferencia', error);
+          		res.status(500).json({ error: error });
+          	}
+          });
+        ```
+        - Detalles de la preferencia:
+          
+            * En Items: va el cuerpo del producto, con su moneda a preferencia USD o ARS
+            * En back_urls: los enlaces que creemos para devolver al cliente.
+            * auto_return: lo que hace es que si todo sale bien, direcciona a la pasarella de mercado pago
+               con los datos del Item, para procesar el pago.
+
+            * Aqui capturo el ID de la preferencia que me brinda mercado libre, la cual cambia por cada consulta:
+            ```
+              		const preference = await new Preference(client)
+              		.create({body})
+              		//console.log('preference', preference)
+              		res.status(200).json({ id: preference.id});
+            ```
+
 
      
 
