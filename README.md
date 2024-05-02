@@ -116,6 +116,9 @@ Son dos maneras que encontre para conectar:
         - En postman o thunder client o el de preferencia hacer la prueba de coneccion:<br>
           Para hacer la prueba los datos lo cargue harcodeados, como muestra la imagen
           Debe mostrar la url de coneccion a la pasarrella, la cual si la pegamos al navegador debe confirmar que conectamos.
+       
+          
+          ![](/img/prueba-post.png)
           
         
   
