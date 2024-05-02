@@ -199,25 +199,23 @@ Son dos maneras que encontre para conectar:
       
 > Paso 4: Hacer las pruebas de pago
 
-  * Presionar pagar con tarjeta :
-
-     * Llenar los campos con los datos de la tarjeta de prueba
+  * Presionar pagar con tarjeta y llenar los campos con los datos de la tarjeta de prueba
 
      <img src="/Img/form1.png" style="width: 70%; height: auto;"> 
    
-    * Llenar el campo DNI con cualquier numero falso:
+  * Llenar el campo DNI con cualquier numero falso:
       
      <img src="/Img/form2.png" style="width: 70%; height: auto;"> 
 
-    * Elejir una cuota:
+  * Elejir una cuota:
 
      <img src="/Img/form3.png" style="width: 70%; height: auto;"> 
      
-   * Completar el campo email:
+  * Completar el campo email:
 
      <img src="/Img/form4.png" style="width: 70%; height: auto;"> 
      
-   * Brinda el mensaje exitoso del pago y redirecciona nuevamento a la ecomerce:
+  * Brinda el mensaje exitoso del pago y redirecciona nuevamento a la ecomerce:
 
      <img src="/Img/form5.png" style="width: 70%; height: auto;"> 
 
