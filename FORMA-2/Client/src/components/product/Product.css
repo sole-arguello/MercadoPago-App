@@ -1,14 +1,26 @@
 .card-product-container{
     margin: 5vh auto;
+    
 }
+
+.boton_wallet {
+    width: 50%;
+    margin: 0 auto;
+}
+.card{
+    border: 1px solid;
+    width: 40%;
+    margin: 0 auto;
+}
+
 
 .card-product{
     text-align: center;
     display: flex;
-    flex-direction: row;
-    justify-content: space-around;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
     flex-wrap: wrap;
-    margin: 5vh auto;
 }
 
 .card-product img{

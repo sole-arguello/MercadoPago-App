@@ -8,19 +8,6 @@ const Product = () => {
    
     const [preferenceId, setPreferenceId] = useState()
 
-    useEffect(() => {
-        const init = async () => {
-            if (typeof import.meta.env.VITE_API_PUBLIC_KEY === 'string') {
-                initMercadoPago(import.meta.env.VITE_API_PUBLIC_KEY || '')
-                const id = await createPreference()
-                if (id) {
-                    setPreferenceId(id)
-                }
-            }
-        }
-        init()
-    }, [])
-
     const productData = {
         title: 'Producto en Venta',
         price: 100,
@@ -30,7 +17,6 @@ const Product = () => {
     
     const createPreference = async () =>{
         try {
-            //envio los datos para crear la preferencia en mercado pago
             const res = await axios.post('http://localhost:3000/api/create_preference', productData)
             const { id } = res.data
             console.log("Respuesta de la preferencia",id)
@@ -40,15 +26,36 @@ const Product = () => {
         }
     }
 
+    useEffect(() => {
+        const init = async () => {
+            if (typeof import.meta.env.VITE_API_PUBLIC_KEY === 'string') {
+
+                initMercadoPago(import.meta.env.VITE_API_PUBLIC_KEY || '')
+
+                const id = await createPreference()
+                if (id) {
+                    setPreferenceId(id)
+                }
+            }
+        }
+
+        init()
+    }, [])
+
     return (
         <div className="card-product-container">
             <div className="card-product">
+            <h1>PRODUCTO EN EL CARRITO</h1>
                 <div className="card">
+
+                    
                     <img src="" alt="Product Image" />
                     <h3 >{productData.title}</h3>
-                    <p className="price">{ productData.price}</p>
-                    {/* <button style={{display: 'none'}} onClick={handleBuy}>Buy</button> */}
-                    <div id="wallet_container">
+                    <p className="price">$ { productData.price}</p>
+
+                    
+                    {/* BOTON DE DIRIGE AUTOMATICAMENTE A MERCADO PAGO */}
+                    <div className='boton_wallet' id="wallet_container">
                         { preferenceId && 
                             <Wallet 
                                 initialization={{ preferenceId: preferenceId }} 
