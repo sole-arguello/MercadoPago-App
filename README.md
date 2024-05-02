@@ -47,7 +47,7 @@ Son dos maneras que encontre para conectar:
         . Importar `cors express`<br>
         . Configurar los midllewares, express, cors, express json
         . Configurar la ruta que va a conectar con la api de mercado pago.
-        `"/api/mercado_pago" ` (el nombre de la ruta a gusto)
+        `"/api/MERCADO_PAGO" ` (el nombre de la ruta a gusto)
         . Verificar que levante el server
 
       * Crear una carpeta routes:<br>
@@ -71,7 +71,8 @@ Son dos maneras que encontre para conectar:
           ```
 
         - Aplicar un metodo POST `"/"` asincrona
-        - Crear la preferencia:
+        - Crear la preferencia:<br>
+          En la response recibo un json con toda la data de mercado pago
         ```
         router.post("/", async (req, res) => {
       
@@ -118,15 +119,72 @@ Son dos maneras que encontre para conectar:
           Esta misma prueba se puede hacer cargando los datos desde el body<br>
           Debe mostrar la url de coneccion a la pasarrella, la cual si la pegamos al navegador debe confirmar que conectamos.
           
-         <div style="display: flex; flex-direction: row">
-          <img src='/Img/prueba-post.png' style="width: 70%; height: auto;">
-          <img src='/Img/prueba-pago.png' style=" ">
-         </div>
-          
-          
-          
-        
-  
+         
+          <img src='/Img/prueba-post.png' style="width: 50%; height: auto;">
+          <img src='/Img/prueba-pago.png' style="width: 46%; height: auto;">
 
-      
-          
+        > Paso 3: (Forma 1) Creacion de la estructura y configuracion del Front con React Vite
+
+          * Iniciar un proyecto vite:
+
+              * `npm create vite@latest`
+              * ` npm i` para intalacion de la carpeta node modules
+              * Corro el proyecto con `npm run dev`
+              * Intalar axios para las peticiones al back
+              * En la raiz cree un json con 3 productos en la raiz del proyecto para simular la ecommerce:
+                ```
+                 [
+                   {
+                     "imagen": "https://via.placeholder.com/150",
+                     "nombre": "Producto 1",
+                     "precio": 20,
+                     "cantidad": 1
+                   },
+                   {
+                     "imagen": "https://via.placeholder.com/150",
+                     "nombre": "Producto 2",
+                     "precio": 30,
+                     "cantidad": 1
+                   },
+                   {
+                     "imagen": "https://via.placeholder.com/150",
+                     "nombre": "Producto 3",
+                     "precio": 25,
+                     "cantidad": 1
+                   }
+                 ]
+                ```
+              * Dentro de la carpeta src crear un componente
+              * En el componente:
+
+                  * Importo axios
+                  * Importo el json
+                  * En un handle donde conecto con el back a la api de mercado pago:
+                     ```
+                      const response = await axios.post("http://localhost:3000/api/Mercado_Pago", products)
+                      
+                       //redirecciona a la pasarella de pago
+                       window.location.href = response.data
+                      }
+                    ```       
+              * Retorno las card con el boton que dirije a la pasarella para realizar el pago:
+                 ```
+                   return (
+                    <div className="containerSuperior">
+                        {
+                            products.map((prod) => (
+                                <div className="containerProducts" key={prod.id}>
+                                    <img src={prod.imagen} alt={prod.nombre} />
+                                    <h2>{prod.nombre}</h2>
+                                    <p>${prod.precio}</p>
+                
+                                    <button onClick={() => handleBuy(prod)}>Comprar</button>
+                                </div>
+                            ))
+                        }
+                    </div>
+                  )
+                 ```
+
+
+   
