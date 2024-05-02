@@ -2,7 +2,7 @@ Pasarella de MERCADO PAGO 2024
 ====
 Son dos maneras que encontre para conectar:
 
-  * La primera conenta directamente con la URL por medio del ACCESS TOKEN que redirecciona a la pasarrella
+  * La primera conecta directamente con la URL por medio del ACCESS TOKEN que redirecciona a la pasarrella
   * La segunda conecta por medio de ACCESS TOKEN del lado del server, la KEY del lado del clinte y el boton
    Wallet que redirige a la pasarrella, como lo indica la [documentacion](https://www.mercadopago.com.ar/developers/es/docs/checkout-pro/integrate-checkout-pro/web)
 
@@ -32,6 +32,7 @@ Son dos maneras que encontre para conectar:
  * Tambien dentro de integraciones en la solapa Tarjetas de Prueba extraer los datos de cualquier tarjeta para las pruebas
  * **IMPORTANTE**: desloguearse para hacer las pruebas del pago.<br><br>
 
+### Para la forma 1:
 
 > Paso 2: (Forma 1) Creacion de la estructura y configuracion del back con Node y Express
 
@@ -115,6 +116,16 @@ Son dos maneras que encontre para conectar:
             * En back_urls: los enlaces que creemos para devolver al cliente.
             * auto_return: lo que hace es que si todo sale bien, direcciona a la pasarella de mercado pago
                con los datos del Item, para procesar el pago.
+   
+            * **IMPORTANTE:** Aqui capturo la url en el `init_point` que me brinda mercado pago, la cual cambia por cada consulta que recibe:
+              ```
+              // creo la preferencia
+               const response = await mercadopago.preferences.create(preference);
+              
+               //console.log('Respuesta', response.body.init_point);
+               res.status(200).json(response.body.init_point );
+              ```
+              
         - En postman o thunder client o el de preferencia hacer la prueba de coneccion:<br>
           Para hacer la prueba los datos lo cargue harcodeados, como muestra la imagen<br>
           Esta misma prueba se puede hacer cargando los datos desde el body<br>
@@ -124,15 +135,15 @@ Son dos maneras que encontre para conectar:
           <img src='/Img/prueba-post.png' style="width: 50%; height: auto;">
           <img src='/Img/prueba-pago.png' style="width: 46%; height: auto;">
 
-        > Paso 3: (Forma 1) Creacion de la estructura y configuracion del Front con React Vite
+> Paso 3: (Forma 1) Creacion de la estructura y configuracion del Front con React Vite
 
-          * Iniciar un proyecto vite:
+   * Iniciar un proyecto vite:
 
-              * `npm create vite@latest`
-              * ` npm i` para intalacion de la carpeta node modules
-              * Corro el proyecto con `npm run dev`
-              * Intalar axios para las peticiones al back
-              * En la raiz cree un json con 3 productos en la raiz del proyecto para simular la ecommerce:
+     * `npm create vite@latest`
+     * ` npm i` para intalacion de la carpeta node modules
+     * Corro el proyecto con `npm run dev`
+     * Intalar axios para las peticiones al back
+     * En la raiz cree un json con 3 productos en la raiz del proyecto para simular la ecommerce:
                 ```
                  [
                    {
@@ -155,42 +166,42 @@ Son dos maneras que encontre para conectar:
                    }
                  ]
                 ```
-              * Dentro de la carpeta src crear un componente
-              * En el componente:
+     * Dentro de la carpeta src crear un componente
+       * En el componente:
 
-                  * Importo axios
-                  * Importo el json
-                  * En un handle donde conecto con el back a la api de mercado pago:
-                     ```
-                      const response = await axios.post("http://localhost:3000/api/Mercado_Pago", products)
-                      
-                       //redirecciona a la pasarella de pago
-                       window.location.href = response.data
-                      }
-                    ```       
-              * Retorno las card con el boton que dirije a la pasarella para realizar el pago:
-                 ```
-                   return (
-                    <div className="containerSuperior">
-                        {
-                            products.map((prod) => (
-                                <div className="containerProducts" key={prod.id}>
-                                    <img src={prod.imagen} alt={prod.nombre} />
-                                    <h2>{prod.nombre}</h2>
-                                    <p>${prod.precio}</p>
+         * Importo axios
+         * Importo el json
+         * En un handle donde conecto con el back a la api de mercado pago:
+               ```
+                const response = await axios.post("http://localhost:3000/api/Mercado_Pago", products)
                 
-                                    <button onClick={() => handleBuy(prod)}>Comprar</button>
-                                </div>
-                            ))
-                        }
-                    </div>
-                  )
-                 ```
-             * Al levantar el server de React visualizo la ecomerce de simulacion:
+                 //redirecciona a la pasarella de pago
+                 window.location.href = response.data
+                }
+              ```       
+         * Retorno las card con el boton que dirije a la pasarella para realizar el pago:
+              ```
+                return (
+                 <div className="containerSuperior">
+                     {
+                         products.map((prod) => (
+                             <div className="containerProducts" key={prod.id}>
+                                 <img src={prod.imagen} alt={prod.nombre} />
+                                 <h2>{prod.nombre}</h2>
+                                 <p>${prod.precio}</p>
+             
+                                 <button onClick={() => handleBuy(prod)}>Comprar</button>
+                             </div>
+                         ))
+                     }
+                 </div>
+               )
+              ```
+         * Al levantar el server de React visualizo la ecomerce de simulacion:
        
-               <img src="/Img/simulador-front.png" style="width: 70%; height: auto;">
+           <img src="/Img/simulador-front.png" style="width: 70%; height: auto;">
            
-             * Al precionar el boton comprar direcciona a la pasarella y en la consola del navegador
+         * Al precionar el boton comprar direcciona a la pasarella y en la consola del navegador
                <br>se puede ver la url que brinda mercado pago :
            
               
@@ -219,7 +230,216 @@ Son dos maneras que encontre para conectar:
 
      <img src="/Img/form5.png" style="width: 70%; height: auto;"> 
 
-     
 
+---------------------------------------------------------------------------------------------------------------------<br>
+Para la forma 2:
+  * Crear una carpeta Server para el back 
+  * Iniciar un proyecto: npm init -y
+  * Instalar las dependencias express, cors, dotenv, nodemon, mercadopago
+  * Configurar el package.json, para que corra con el comando `npm run dev o start`, a preferencia del desarrollador.
+  * Crear en la raiz un archivo .env para alojar la variable de entorno con el access token que brinda mercado pago.
+  ```
+    ACCESS_TOKEN = " el access token de mercado pago "
+  ```
+    
+  * Crear en la raiz el archivo server.js:
     
      
+    - Realizar las importaciones incluida la de mercado pago tal cual la [documentacion]()
+        ```
+         import express from 'express'
+         import cors from 'cors'
+         import dotenv from 'dotenv'
+         import { MercadoPagoConfig, Preference } from 'mercadopago';
+        ```
+    
+    - Configurar los midllewares, express, cors, express json.
+        ```
+         dotenv.config()
+         const app = express()
+         app.use(express.json())
+         app.use(cors())
+        ```
+
+    - Configurar mercado pago tal cual la documentacion, con la variable proveniente del .env:
+        ```
+         const client = new MercadoPagoConfig(
+         	{ accessToken: process.env.ACCESS_TOKEN || ' ' }
+         );
+        ```
+    
+    - Configurar el puerto para el servidor.
+    - Verificar que al ejecutar `npm run dev` levante el servidor en el puerto configurado con exito.
+
+    
+    - En el archivo .env colocar el access token que brinda mercado pago:<br>
+          ```
+          ACCESS_TOKEN = " el access token de mercado pago "
+          ```
+    - En el archivo routes: <br>
+    - importar `dotenv mercadopago y router`<br>
+          ```
+          import { Router } from "express";
+          import mercadopago from "mercadopago";
+          import dotenv from "dotenv";
+          dotenv.config();
+          ```
+    - Poner la configuracion con el access token que brinda mercado pago y que extraigo del .env:
+          ```
+          mercadopago.configure({
+              access_token: process.env.ACCESS_TOKEN || '',
+          })
+          ```
+
+    - Aplicar un metodo POST, funcion asincrona
+    - Crear la preferencia:<br>
+        ```
+          app.post("/api/create_preference", async (req, res) => {
+          
+          	
+          	try {
+          		const body = {
+          			items: [
+          				{
+          					title: req.body.title,
+          					unit_price: Number(req.body.price),
+          					quantity: Number(req.body.quantity),
+          					currency_id: "ARS"
+          				}
+          			],
+          			back_urls: {
+          				"success": "http://localhost:5173/",
+          				"failure": "",
+          				"pending": ""
+          			},
+          			auto_return: "approved",
+          		};
+    
+          		const preference = await new Preference(client)
+          		.create({body})
+          		//console.log('preference', preference)
+          		res.status(200).json({ id: preference.id});
+
+          	} catch (error) {
+          		console.error('Error al crear la preferencia', error);
+          		res.status(500).json({ error: error });
+          	}
+          });
+        ```
+    - Detalles de la preferencia:
+          
+         * En Items: va el cuerpo del producto, con su moneda a preferencia USD o ARS
+         * En back_urls: los enlaces que creemos para devolver al cliente.
+         * auto_return: lo que hace es que si todo sale bien, direcciona a la pasarella de mercado pago
+            con los datos del Item, para procesar el pago.
+
+         * **IMPORTANTE:** Aqui capturo el `ID` de la preferencia que me brinda mercado libre, la cual cambia por cada consulta:
+         ```
+            //aqui creo la preferencia
+             const preference = await new Preference(client).create({body})
+         
+             //console.log('preference', preference)
+             res.status(200).json({ id: preference.id});
+         ```
+
+    - En postman o thunder client o el de preferencia hacer la prueba de coneccion:<br>
+          Para hacer la prueba los datos lo cargue harcodeados, como muestra la imagen<br>
+          Esta misma prueba se puede hacer cargando los datos desde el body<br>
+          Debe mostrar el `ID` de coneccion a la pasarrella, y que va a ser enviado al front.
+
+         <img src="/Img/prueba2.png" style="width: 70%; height: auto">
+   
+   
+   
+> Paso 3: (Forma 2) Creacion de la estructura y configuracion del Front con React Vite
+
+* Iniciar un proyecto vite:
+
+  * `npm create vite@latest`
+  * ` npm i` para intalacion de la carpeta node modules
+  * **IMPORTANTE:** `npm install @mercadopago/sdk-react`, proviniente de la 
+      [documentacion]( https://www.mercadopago.com.ar/developers/es/docs/checkout-pro/integrate-checkout-pro/web) 
+      de mercado pago
+
+  * Corro el proyecto con `npm run dev`
+  * Intalar axios para las peticiones al back
+  * **IMPORTANTE:** en la raiz tambien creo un archivo `.env`, que va a contener la `PUBLIC_KEY` de mercado pago
+      ```
+       VITE_API_PUBLIC_KEY = " la public key que obtengo de la app creada en mi cuenta mercado pago "
+
+      ```
+  * Dentro de la carpeta src crear un componente
+      
+      * En el componente:
+
+        * Importo axios
+        * Importo mercado pago como en la documentacion:
+           ```
+            import { initMercadoPago, Wallet } from '@mercadopago/sdk-react'
+           ```
+        * Creo un objeto con los datos de un producto, y hago la llamada a la pi de mercado pago, le paso el producto
+           ```
+             const productData = {
+                 title: 'Producto en Venta',
+                 price: 100,
+                 quantity: 1,
+                 currency_id: 'ARS',
+             }
+             
+             const createPreference = async () =>{
+                 try {
+                     const res = await axios.post('http://localhost:3000/api/create_preference', productData)
+                     const { id } = res.data
+                     console.log("Respuesta de la preferencia",id)
+                     return id
+                 } catch (error) {
+                     console.log(' Error al crear la preferencia',error)
+                 }
+             }
+          ```  
+
+        * Por medio de la public key muestra el boton de mercado pago (ver mas detalles en el codigo del repositorio)
+             ```
+              initMercadoPago(import.meta.env.VITE_API_PUBLIC_KEY || '')
+             ```
+
+           
+        * Retorno las card con el boton mercado pago que ya tiene la funcionalidad de redirijir a la
+             pasarella para realizar el pago:
+             ```
+               return (
+               <div className="card-product-container">
+                   <div className="card-product">
+                   <h1>PRODUCTO EN EL CARRITO</h1>
+                       <div className="card">
+       
+                           
+                           <img src="" alt="Product Image" />
+                           <h3 >{productData.title}</h3>
+                           <p className="price">$ { productData.price}</p>
+       
+                           
+                           {/* BOTON DE DIRIGE AUTOMATICAMENTE A MERCADO PAGO */}
+                           <div className='boton_wallet' id="wallet_container">
+                               { preferenceId && 
+                                   <Wallet 
+                                       initialization={{ preferenceId: preferenceId }} 
+                                       customization={{ texts:{ valueProp: 'smart_option'}}} 
+                                   />
+                               }
+                           </div>
+
+                           
+                       </div>
+                   </div>
+               </div>
+              )
+             ```
+        * Al levantar el server de React visualizo la simulacion del carrito con el producto a pagar:
+    
+          <img src="/Img/carrito.png" style="width: 70%; height: auto;">
+        
+        * Al precionar el boton comprar direcciona a la pasarella para seguir los pasos hasta completar el pago:
+               
+          <img src="/Img/pasarrella.png" style="width: 70%; height: auto;">
+
