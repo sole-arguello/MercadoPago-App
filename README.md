@@ -113,7 +113,8 @@ Son dos maneras que encontre para conectar:
           
             * En Items: va el cuerpo del producto, con su moneda a preferencia USD o ARS
             * En back_urls: los enlaces que creemos para devolver al cliente.
-            * auto_return: lo que hace es que si todo sale bien, direcciona a la pasarella de mercado pago con los datos del Item, para procesar el pago.
+            * auto_return: lo que hace es que si todo sale bien, direcciona a la pasarella de mercado pago
+               con los datos del Item, para procesar el pago.
         - En postman o thunder client o el de preferencia hacer la prueba de coneccion:<br>
           Para hacer la prueba los datos lo cargue harcodeados, como muestra la imagen<br>
           Esta misma prueba se puede hacer cargando los datos desde el body<br>
@@ -185,6 +186,42 @@ Son dos maneras que encontre para conectar:
                     </div>
                   )
                  ```
+             * Al levantar el server de React visualizo la ecomerce de simulacion:
+       
+               <img src="/Img/simulador-front.png" style="width: 70%; height: auto;">
+           
+             * Al precionar el boton comprar direcciona a la pasarella y en la consola del navegador
+               <br>se puede ver la url que brinda mercado pago :
+           
+              
+               <img src="/Img/prueba-front.png" style="width: 70%; height: auto;">
 
+      
+> Paso 4: Hacer las pruebas de pago
 
+  * Presionar pagar con tarjeta :
+
+     * Llenar los campos con los datos de la tarjeta de prueba
+
+     <img src="/Img/form1.png" style="width: 70%; height: auto;"> 
    
+    * Llenar el campo DNI con cualquier numero falso:
+      
+     <img src="/Img/form2.png" style="width: 70%; height: auto;"> 
+
+    * Elejir una cuota:
+
+     <img src="/Img/form3.png" style="width: 70%; height: auto;"> 
+     
+   * Completar el campo email:
+
+     <img src="/Img/form4.png" style="width: 70%; height: auto;"> 
+     
+   * Brinda el mensaje exitoso del pago y redirecciona nuevamento a la ecomerce:
+
+     <img src="/Img/form5.png" style="width: 70%; height: auto;"> 
+
+     
+
+    
+     
