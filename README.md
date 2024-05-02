@@ -440,6 +440,7 @@ Para la forma 2:
           <img src="/Img/carrito.png" style="width: 70%; height: auto;">
         
         * Al precionar el boton comprar direcciona a la pasarella para seguir los pasos hasta completar el pago:
+           - Las siguientes pantallas se pueden observar en el paso 4 presentadas mas arriba.
                
-          <img src="/Img/pasarrella.png" style="width: 70%; height: auto;">
+          <img src="/Img/pasarella.png" style="width: 70%; height: auto;">
 
